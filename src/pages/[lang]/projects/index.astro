@@ -14,7 +14,7 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 
-const projectOrder = ['marginalia', 'camp', 'trace', 'quill'];
+const projectOrder = ['oneshell', 'mynavicat'];
 const allProjects = await getCollection('projects', ({ id }) => id.startsWith(`${lang}/`));
 const projects = projectOrder
   .map((slug) => allProjects.find((p) => p.id === `${lang}/${slug}`))

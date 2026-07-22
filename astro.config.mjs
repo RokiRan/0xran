@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://roki.run',
+  site: 'https://0xran.com',
   redirects: {
     '/': '/zh/',
   },

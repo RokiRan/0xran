@@ -27,7 +27,7 @@ export const ui = {
     'hero.status': 'Open to interesting work · 2026',
 
     'home.featured.title': 'Projects in motion',
-    'home.featured.meta': '4 of 12',
+    'home.featured.meta': '2 of 2',
     'home.featured.viewAll': 'See all projects',
 
     'home.intro.eyebrow': 'On this camp',
@@ -115,7 +115,7 @@ export const ui = {
     'hero.status': '正在接有兴趣的事 · 2026',
 
     'home.featured.title': '正在做的东西',
-    'home.featured.meta': '4 / 12',
+    'home.featured.meta': '2 / 2',
     'home.featured.viewAll': '所有项目',
 
     'home.intro.eyebrow': '关于这个营地',
