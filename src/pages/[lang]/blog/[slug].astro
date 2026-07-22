@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import { useTranslations, localePath, formatDate } from '../../../i18n/utils';
+import { languages, type Lang } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => {
+    const [lang, slug] = post.id.split('/');
+    return { params: { lang, slug }, props: { post } };
+  });
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { post } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(post);
+const d = post.data;
+---
+
+<BaseLayout lang={lang} title={`${d.title} · ${t('meta.siteName')}`} description={d.description} activePath="/blog">
+  <article>
+    <header class="article-header">
+      <div class="container container--content">
+        <div class="fade-up">
+          <a href={localePath(lang, '/blog')} class="back-link">
+            <Icon name="arrowLeft" size={14} />
+            <span>{t('nav.blog')}</span>
+          </a>
+        </div>
+        <span class="eyebrow fade-up" style="--i:1">{d.kind}</span>
+        <h1 class="fade-up" style="--i:2">{d.title}</h1>
+        <p class="lede fade-up" style="--i:3">{d.description}</p>
+        <div class="article-meta fade-up" style="--i:4">
+          <span>{formatDate(d.date, lang)}</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="tags">
+            {d.tags.map((tag) => <span class="tag">{tag}</span>)}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="article-body container container--content">
+      <Content />
+    </div>
+
+    <div class="container container--prose">
+      <div class="article-back">
+        <a href={localePath(lang, '/blog')} class="link">
+          <Icon name="arrowLeft" size={14} />
+          <span>{t('blog.back')}</span>
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

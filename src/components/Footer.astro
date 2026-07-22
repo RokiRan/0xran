@@ -1,0 +1,38 @@
+---
+import { useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const p = profile[lang];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-meta">
+      <p>{t('footer.note')}</p>
+      <p>{t('footer.location')}</p>
+      <p class="copy">{t('footer.copy')} · {new Date().getFullYear()}</p>
+    </div>
+    <div class="footer-links">
+      <a href={p.social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <Icon name="github" size={18} />
+      </a>
+      <a href={p.social.x} target="_blank" rel="noopener noreferrer" aria-label="X">
+        <Icon name="x" size={18} />
+      </a>
+      <a href={p.social.email} aria-label="Email">
+        <Icon name="mail" size={18} />
+      </a>
+      <a href={`/${lang}/rss.xml`} aria-label="RSS">
+        <Icon name="rss" size={18} />
+      </a>
+    </div>
+  </div>
+</footer>

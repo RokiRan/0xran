@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Icon from '../../../components/Icon.astro';
+import { useTranslations, localePath } from '../../../i18n/utils';
+import { languages, type Lang } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => {
+    const [lang, slug] = project.id.split('/');
+    return { params: { lang, slug }, props: { project } };
+  });
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const { project } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(project);
+const d = project.data;
+---
+
+<BaseLayout lang={lang} title={`${d.title} · ${t('meta.siteName')}`} description={d.description} activePath="/projects">
+  <section class="project-detail">
+    <div class="container container--content">
+      <div class="fade-up">
+        <a href={localePath(lang, '/projects')} class="back-link">
+          <Icon name="arrowLeft" size={14} />
+          <span>{t('nav.projects')}</span>
+        </a>
+      </div>
+
+      <div class="head fade-up" style="--i:1">
+        <h1>{d.title}</h1>
+        <span class="status" data-status={d.status}>{t(`project.status.${d.status}` as const)}</span>
+      </div>
+
+      <p class="lede fade-up" style="--i:2">{d.description}</p>
+
+      <div class="links fade-up" style="--i:3">
+        {
+          d.repo && (
+            <a href={d.repo} target="_blank" rel="noopener noreferrer">
+              <Icon name="github" size={14} />
+              <span>{t('project.repo')}</span>
+              <Icon name="arrowUpRight" size={11} />
+            </a>
+          )
+        }
+        {
+          d.demo && (
+            <a href={d.demo} target="_blank" rel="noopener noreferrer">
+              <Icon name="link" size={14} />
+              <span>{t('project.demo')}</span>
+              <Icon name="arrowUpRight" size={11} />
+            </a>
+          )
+        }
+      </div>
+
+      <div class="article-meta fade-up" style="--i:4">
+        <span>{d.year}</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="tags">
+          {d.tags.map((tag) => <span class="tag">{tag}</span>)}
+        </span>
+      </div>
+
+      <div class="body fade-up prose" style="--i:5">
+        <Content />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

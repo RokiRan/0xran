@@ -1,0 +1,159 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import { useTranslations, localePath } from '../../i18n/utils';
+import { languages, type Lang } from '../../i18n/ui';
+import { profile } from '../../data/profile';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+const projectOrder = ['marginalia', 'camp', 'trace', 'quill'];
+const allProjects = await getCollection('projects', ({ id }) => id.startsWith(`${lang}/`));
+const projects = projectOrder
+  .map((slug) => allProjects.find((p) => p.id === `${lang}/${slug}`))
+  .filter((p) => p !== undefined);
+
+const posts = (await getCollection('blog', ({ id }) => id.startsWith(`${lang}/`))).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const email = profile[lang].social.email;
+---
+
+<BaseLayout lang={lang} title={`${t('meta.siteName')} · ${t('meta.tagline')}`} description={t('meta.description')} activePath="/">
+  {/* ============ HERO ============ */}
+  <section class="hero">
+    <div class="container">
+      <div class="hero-meta fade-up">
+        <span class="dot" aria-hidden="true"></span>
+        <span>{t('hero.status')}</span>
+      </div>
+
+      <h1 class="hero-title fade-up" style="--i:1">
+        {lang === 'zh' ? (
+          <Fragment set:html={`一位不知名极客的<br/><em>营地</em>。`} />
+        ) : (
+          <Fragment set:html={`A small camp for an<br/><em>obscure</em> geek.`} />
+        )}
+      </h1>
+
+      <p class="hero-lede fade-up" style="--i:2">{t('hero.role')}</p>
+
+      <div class="hero-actions fade-up" style="--i:3">
+        <a href={localePath(lang, '/projects')} class="btn btn--primary">
+          <span>{t('hero.ctaPrimary')}</span>
+          <Icon name="arrowRight" size={16} />
+        </a>
+        <a href={localePath(lang, '/blog')} class="btn btn--ghost">
+          <span>{t('hero.ctaSecondary')}</span>
+          <Icon name="arrowUpRight" size={14} />
+        </a>
+      </div>
+
+      <span class="hero-rule fade-up" style="--i:4" aria-hidden="true"></span>
+
+      <div class="hero-meta fade-up" style="--i:5">
+        <span class="text-muted">{profile[lang].name} · {lang === 'zh' ? 'Roki Ran' : '冉再兴'}</span>
+        <span class="text-subtle">·</span>
+        <span class="text-muted">{t('footer.location')}</span>
+      </div>
+    </div>
+  </section>
+
+  {/* ============ INTRO ============ */}
+  <section class="section">
+    <div class="container container--content">
+      <div class="section-head fade-up">
+        <span class="eyebrow">{t('home.intro.eyebrow')}</span>
+      </div>
+      <h2 class="fade-up" style="--i:1">{t('home.intro.title')}</h2>
+      <p class="fade-up text-muted" style="--i:2; font-size: 1.0625rem; line-height: 1.8; margin-top: 16px;">
+        {t('home.intro.body')}
+      </p>
+      <p class="fade-up" style="--i:3; margin-top: 16px; font-family: var(--font-display); font-style: italic; color: var(--muted);">
+        {t('home.intro.sign')}
+      </p>
+    </div>
+  </section>
+
+  {/* ============ FEATURED WORK ============ */}
+  <section class="section">
+    <div class="container">
+      <div class="section-head fade-up">
+        <h2>{t('home.featured.title')}</h2>
+        <span class="meta">{t('home.featured.meta')}</span>
+      </div>
+
+      <div class="featured-grid">
+        {projects.map((p, i) => <ProjectCard project={p} lang={lang} index={i} />)}
+      </div>
+
+      <div class="fade-up" style="margin-top: 32px;">
+        <a href={localePath(lang, '/projects')} class="link">
+          <span>{t('home.featured.viewAll')}</span>
+          <Icon name="arrowRight" size={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* ============ RECENT WRITING ============ */}
+  <section class="section">
+    <div class="container">
+      <div class="section-head fade-up">
+        <h2>{t('home.recent.title')}</h2>
+        <a href={localePath(lang, '/blog')} class="link">
+          <span>{t('home.recent.viewAll')}</span>
+          <Icon name="arrowRight" size={14} />
+        </a>
+      </div>
+      <div>
+        {posts.map((p, i) => <PostCard post={p} lang={lang} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  {/* ============ CONTACT STRIP ============ */}
+  <section class="section">
+    <div class="container container--content">
+      <hr class="divider" />
+      <div class="contact-strip">
+        <div>
+          <span class="eyebrow fade-up">{t('home.contact.eyebrow')}</span>
+          <h2 class="fade-up" style="--i:1; margin-top: 12px;">{t('home.contact.title')}</h2>
+          <p class="fade-up text-muted" style="--i:2; margin-top: 12px; max-width: 50ch;">
+            {t('home.contact.body')}
+          </p>
+        </div>
+        <a href={email} class="btn btn--primary fade-up" style="--i:3">
+          <Icon name="mail" size={16} />
+          <span>{t('home.contact.cta')}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-strip {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+    padding-block: 48px;
+  }
+  @media (max-width: 720px) {
+    .contact-strip {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+  }
+</style>

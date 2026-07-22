@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Icon from '../../../components/Icon.astro';
+import { useTranslations, localePath } from '../../../i18n/utils';
+import { languages, type Lang } from '../../../i18n/ui';
+import { profile } from '../../../data/profile';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+const posts = (await getCollection('blog', ({ id }) => id.startsWith(`${lang}/`))).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
+---
+
+<BaseLayout lang={lang} title={`${t('blog.title')} · ${t('meta.siteName')}`} description={t('blog.lede')} activePath="/blog">
+  <section class="page-hero">
+    <div class="container container--content">
+      <div class="fade-up">
+        <a href={localePath(lang, '/')} class="back-link">
+          <Icon name="arrowLeft" size={14} />
+          <span>{t('nav.home')}</span>
+        </a>
+      </div>
+      <span class="eyebrow fade-up" style="--i:1">{t('blog.eyebrow')}</span>
+      <h1 class="page-title fade-up" style="--i:2">{t('blog.title')}</h1>
+      <p class="hero-lede fade-up" style="--i:3; max-width: 56ch;">{t('blog.lede')}</p>
+      <span class="hero-rule fade-up" style="--i:4" aria-hidden="true"></span>
+      <div class="hero-meta fade-up" style="--i:5">
+        <span class="text-muted">{t('blog.count', { count: posts.length })}</span>
+        <span class="text-subtle">·</span>
+        <span class="text-muted">{t('blog.sorted')}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--content">
+      <div class="tag-filter fade-up" data-tag-filter>
+        <span class="filter-label">{t('blog.filter')}</span>
+        <button type="button" class="tag" data-tag="all" data-active="true">{t('blog.filter.all')}</button>
+        {allTags.map((tag) => <button type="button" class="tag" data-tag={tag}>{tag}</button>)}
+      </div>
+
+      <div>
+        {posts.map((p, i) => <PostCard post={p} lang={lang} index={i} />)}
+      </div>
+
+      <p class="fade-up text-muted" style="margin-top: 32px; font-size: 0.9375rem;">
+        {t('blog.archive.note')}
+        <a href={profile[lang].social.github} class="link" target="_blank" rel="noopener noreferrer">
+          {t('blog.archive.link')}
+          <span style="display:inline-block;vertical-align:middle;"><Icon name="arrowUpRight" size={12} /></span>
+        </a>{t('blog.archive.tail')}
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { useTranslations, localePath } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+import Icon from './Icon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  lang: Lang;
+  index?: number;
+}
+
+const { project, lang, index = 0 } = Astro.props;
+const t = useTranslations(lang);
+const slug = project.id.split('/').pop()!;
+const d = project.data;
+---
+
+<a
+  href={localePath(lang, `/projects/${slug}`)}
+  class="project-card fade-up"
+  style={`--i:${index}`}
+>
+  <div class="head">
+    <h3>{d.title}</h3>
+    <span class="ext"><Icon name="arrowUpRight" size={16} /></span>
+  </div>
+  <p class="desc">{d.description}</p>
+  <div class="meta">
+    <span>{d.year} · {t(`project.status.${d.status}` as const)}</span>
+    <span class="tags">{d.tags.map((tag) => <span class="tag">{tag}</span>)}</span>
+  </div>
+</a>

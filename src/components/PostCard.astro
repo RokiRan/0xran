@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { localePath, formatDate } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  lang: Lang;
+  index?: number;
+}
+
+const { post, lang, index = 0 } = Astro.props;
+const slug = post.id.split('/').pop()!;
+const d = post.data;
+---
+
+<a
+  href={localePath(lang, `/blog/${slug}`)}
+  class="post-card fade-up"
+  data-tags={d.tags.join(',')}
+  style={`--i:${index}`}
+>
+  <div class="date tabular">{formatDate(d.date, lang)}</div>
+  <div class="body">
+    <h3>{d.title}</h3>
+    <p class="desc">{d.description}</p>
+  </div>
+  <div class="tags">{d.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+</a>

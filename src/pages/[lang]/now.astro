@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { useTranslations, localePath } from '../../i18n/utils';
+import { languages, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+interface NowItem {
+  date: string;
+  title: string;
+  body: string; // may contain inline <code>
+}
+
+const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
+  zh: {
+    watching: [
+      {
+        date: '2026-07',
+        title: 'Marginalia',
+        body: '扩展在 Firefox 上的兼容性。WebExtensions 在 content script 上有些古怪的坑。',
+      },
+      {
+        date: '2026-07',
+        title: 'Trace',
+        body: '加一个 <code>trace graph --svg</code>，让图表输出可以直接嵌进笔记里。',
+      },
+      {
+        date: '2026-06',
+        title: '在读',
+        body: "Robin Sloan 的《Mr. Penumbra's 24-Hour Bookstore》，重读。以及慢慢翻《The Pragmatic Programmer》。",
+      },
+    ],
+    avoiding: [
+      {
+        date: '2026-07',
+        title: '任何带红点通知的东西',
+        body: '收件箱标签页已经关了。周五再打开。',
+      },
+      {
+        date: '2026-06',
+        title: '仓促的改版',
+        body: '现在的站挺好。在 Q4 之前不动它。',
+      },
+    ],
+  },
+  en: {
+    watching: [
+      {
+        date: '2026-07',
+        title: 'Marginalia',
+        body: 'Firefox compatibility for the extension. WebExtensions have weird gotchas around content scripts.',
+      },
+      {
+        date: '2026-07',
+        title: 'Trace',
+        body: 'Adding <code>trace graph --svg</code> so the chart output can be embedded in notes.',
+      },
+      {
+        date: '2026-06',
+        title: 'Reading',
+        body: "Robin Sloan's <em>Mr. Penumbra's 24-Hour Bookstore</em>, again. And a slow reread of <em>The Pragmatic Programmer</em>.",
+      },
+    ],
+    avoiding: [
+      {
+        date: '2026-07',
+        title: 'Anything with a notification badge',
+        body: 'Closed the inbox tab. Reopening it Friday.',
+      },
+      {
+        date: '2026-06',
+        title: 'Rush rebrand',
+        body: "The current site looks fine. I'm not touching it until at least Q4.",
+      },
+    ],
+  },
+};
+
+const { watching, avoiding } = nowContent[lang];
+---
+
+<BaseLayout lang={lang} title={`${t('now.title')} · ${t('meta.siteName')}`} description={t('now.lede')} activePath="/now">
+  <section class="page-hero">
+    <div class="container container--content">
+      <div class="fade-up">
+        <a href={localePath(lang, '/')} class="back-link">
+          <Icon name="arrowLeft" size={14} />
+          <span>{t('nav.home')}</span>
+        </a>
+      </div>
+      <span class="eyebrow fade-up" style="--i:1">{t('now.eyebrow')}</span>
+      <h1 class="page-title fade-up" style="--i:2">{t('now.title')}</h1>
+      <p class="hero-lede fade-up" style="--i:3; max-width: 56ch;">{t('now.lede')}</p>
+      <span class="hero-rule fade-up" style="--i:4" aria-hidden="true"></span>
+      <div class="hero-meta fade-up" style="--i:5">
+        <span class="text-muted">{t('now.updated')}</span>
+        <span class="text-subtle">·</span>
+        <span class="text-muted">{t('now.updated.value')}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--content">
+      <h2 class="fade-up" style="margin-bottom: 16px;">{t('now.watching')}</h2>
+      <ul class="now-list fade-up" style="--i:1">
+        {
+          watching.map((item) => (
+            <li class="now-item">
+              <span class="date tabular">{item.date}</span>
+              <div class="body">
+                <strong>{item.title}</strong>
+                <p set:html={item.body} />
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2 class="fade-up" style="margin-top: 48px; margin-bottom: 16px;">{t('now.avoiding')}</h2>
+      <ul class="now-list fade-up" style="--i:1">
+        {
+          avoiding.map((item) => (
+            <li class="now-item">
+              <span class="date tabular">{item.date}</span>
+              <div class="body">
+                <strong>{item.title}</strong>
+                <p set:html={item.body} />
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <hr class="divider" style="margin-top: 64px;" />
+      <p class="fade-up text-muted" style="margin-top: 32px; font-size: 0.875rem; max-width: 56ch;">
+        {t('now.inspiration')}
+        <a href="https://nownownow.com/about" class="link" target="_blank" rel="noopener noreferrer">nownownow.com</a>{t('now.inspiration.tail')}
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,76 @@
+---
+import { useTranslations, localePath, langSwitchHref } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+import { profile } from '../data/profile';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+  activePath: string; // '/', '/projects', '/blog', '/now'
+}
+
+const { lang, activePath } = Astro.props;
+const t = useTranslations(lang);
+const p = profile[lang];
+const other: Lang = lang === 'en' ? 'zh' : 'en';
+const switchHref = langSwitchHref(Astro.url.pathname, other);
+
+const nav = [
+  { href: localePath(lang, '/'), label: t('nav.home'), key: '/' },
+  { href: localePath(lang, '/projects'), label: t('nav.projects'), key: '/projects' },
+  { href: localePath(lang, '/blog'), label: t('nav.blog'), key: '/blog' },
+  { href: localePath(lang, '/now'), label: t('nav.now'), key: '/now' },
+];
+---
+
+<header class="site-header" data-header>
+  <div class="container">
+    <a href={localePath(lang, '/')} class="brand">
+      <span class="brand-mark">[R]</span>
+      <span>{p.name}</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      {
+        nav.map((n) => (
+          <a href={n.href} {...(activePath === n.key ? { 'aria-current': 'page' } : {})}>
+            {n.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="header-tools">
+      <a href={switchHref} class="lang-switch" aria-label={t('lang.switch')}>
+        <span class={lang === 'en' ? 'active' : ''}>EN</span><span class="sep">/</span><span
+          class={lang === 'zh' ? 'active' : ''}>ZH</span
+        >
+      </a>
+      <button
+        type="button"
+        class="icon-btn"
+        data-theme-toggle
+        aria-label={t('theme.toDark')}
+        data-label-dark={t('theme.toDark')}
+        data-label-light={t('theme.toLight')}
+      >
+        <Icon name="moon" size={18} class="theme-icon theme-icon--moon" />
+        <Icon name="sun" size={18} class="theme-icon theme-icon--sun" />
+      </button>
+      <button type="button" class="icon-btn menu-toggle" aria-label="Menu" data-menu-toggle>
+        <Icon name="menu" size={20} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* Show the icon matching the action (click to switch TO that theme) */
+  .theme-icon--sun {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .theme-icon--moon {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .theme-icon--sun {
+    display: block;
+  }
+</style>

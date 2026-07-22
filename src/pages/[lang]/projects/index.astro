@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import Icon from '../../../components/Icon.astro';
+import { useTranslations, localePath } from '../../../i18n/utils';
+import { languages, type Lang } from '../../../i18n/ui';
+import { profile } from '../../../data/profile';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+const projectOrder = ['marginalia', 'camp', 'trace', 'quill'];
+const allProjects = await getCollection('projects', ({ id }) => id.startsWith(`${lang}/`));
+const projects = projectOrder
+  .map((slug) => allProjects.find((p) => p.id === `${lang}/${slug}`))
+  .filter((p) => p !== undefined);
+---
+
+<BaseLayout lang={lang} title={`${t('projects.title')} · ${t('meta.siteName')}`} description={t('projects.lede')} activePath="/projects">
+  <section class="page-hero">
+    <div class="container container--content">
+      <div class="fade-up">
+        <a href={localePath(lang, '/')} class="back-link">
+          <Icon name="arrowLeft" size={14} />
+          <span>{t('nav.home')}</span>
+        </a>
+      </div>
+      <span class="eyebrow fade-up" style="--i:1">{t('projects.eyebrow')}</span>
+      <h1 class="page-title fade-up" style="--i:2">{t('projects.title')}</h1>
+      <p class="hero-lede fade-up" style="--i:3; max-width: 56ch;">{t('projects.lede')}</p>
+      <span class="hero-rule fade-up" style="--i:4" aria-hidden="true"></span>
+      <div class="hero-meta fade-up" style="--i:5">
+        <span class="text-muted">{t('projects.count', { count: projects.length })}</span>
+        <span class="text-subtle">·</span>
+        <span class="text-muted">{t('projects.updated')}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="featured-grid">
+        {projects.map((p, i) => <ProjectCard project={p} lang={lang} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--content">
+      <hr class="divider" />
+      <p class="fade-up text-muted" style="margin-top: 32px; max-width: 60ch;">
+        {t('projects.archive.note')}
+        <a href={profile[lang].social.github} class="link" target="_blank" rel="noopener noreferrer">
+          @RokiRan on GitHub
+          <span style="display:inline-block;vertical-align:middle;"><Icon name="arrowUpRight" size={12} /></span>
+        </a>{t('projects.archive.tail')}
+      </p>
+    </div>
+  </section>
+</BaseLayout>
