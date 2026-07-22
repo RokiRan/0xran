@@ -1,0 +1,21 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept-language", "value": "(?i).*zh.*" }],
+      "destination": "/zh/",
+      "statusCode": 307
+    },
+    {
+      "source": "/",
+      "missing": [{ "type": "header", "key": "accept-language" }],
+      "destination": "/zh/",
+      "statusCode": 307
+    },
+    {
+      "source": "/",
+      "destination": "/en/",
+      "statusCode": 307
+    }
+  ]
+}

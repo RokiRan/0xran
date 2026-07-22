@@ -1,0 +1,25 @@
+---
+// Root landing: bounce visitors to their preferred locale without flashing
+// content. Vercel intercepts `/` at the edge (see vercel.json) before this
+// page is ever served in production; this file is the fallback for
+// `astro dev` / `astro preview` and any other static host.
+---
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>0xran</title>
+    <script is:inline>
+      (function () {
+        var langs = navigator.languages || [navigator.language || ''];
+        var zh = langs.some(function (l) { return /^zh/i.test(l); });
+        location.replace(zh ? '/zh/' : '/en/');
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/zh/" />
+    </noscript>
+  </head>
+  <body></body>
+</html>
