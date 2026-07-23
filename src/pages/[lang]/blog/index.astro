@@ -5,7 +5,6 @@ import PostCard from '../../../components/PostCard.astro';
 import Icon from '../../../components/Icon.astro';
 import { useTranslations, localePath } from '../../../i18n/utils';
 import { languages, type Lang } from '../../../i18n/ui';
-import { profile } from '../../../data/profile';
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
@@ -52,14 +51,6 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
       <div>
         {posts.map((p, i) => <PostCard post={p} lang={lang} index={i} />)}
       </div>
-
-      <p class="fade-up text-muted" style="margin-top: 32px; font-size: 0.9375rem;">
-        {t('blog.archive.note')}
-        <a href={profile[lang].social.github} class="link" target="_blank" rel="noopener noreferrer">
-          {t('blog.archive.link')}
-          <span style="display:inline-block;vertical-align:middle;"><Icon name="arrowUpRight" size={12} /></span>
-        </a>{t('blog.archive.tail')}
-      </p>
     </div>
   </section>
 </BaseLayout>

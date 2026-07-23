@@ -17,13 +17,13 @@ The review method is a little meta too: **every hands-on test in this review was
 
 ## What it is
 
-ego lite is a Chromium-based browser from Citro Labs (kernel 150 — very fresh), macOS-only for now, free. The pitch in one line: **you and your AI agent share one browser, each doing your own thing**.
+ego lite is a Chromium-based browser from Citro Labs (kernel 150 — very fresh), macOS-only for now, free. The pitch in one line: you and your AI agent share one browser, each doing your own thing.
 
 - The agent works in isolated **Spaces** (task spaces) without stealing your tabs or mouse focus
 - It inherits the login state you migrated from Chrome, so the agent operates sites *as you*
 - Agents connect through the `ego-browser` skill, driving the browser with a single Node.js heredoc script instead of the "run one command, read output, run another" loop
 
-The official benchmark claims "up to 2.5–3.45× faster than Vercel's agent-browser" — note the README says 2.5× while the Chinese docs say 3.45×. **The official numbers don't even agree with each other.** I discount that kind of figure and measure instead.
+The official benchmark claims "up to 2.5–3.45× faster than Vercel's agent-browser" — note the README says 2.5× while the Chinese docs say 3.45×. The official numbers don't even agree with each other. I discount that kind of figure and measure instead.
 
 ## Test 1: How token-cheap is the Snapshot, really?
 
@@ -41,9 +41,9 @@ root
       button [ref=4, loc=css:input[name="login-button"]]
 ```
 
-**Complex page (GitHub repo page)**: the snapshot balloons to 49,392 chars (~14k tokens). Sounds scary, but the raw HTML of the same page is 413KB — an 8.4× compression ratio, generated in **18ms**. For comparison, dumping full a11y trees or HTML to a model with Playwright-style tools costs several to dozens of times more tokens.
+**Complex page (GitHub repo page)**: the snapshot balloons to 49,392 chars (~14k tokens). Sounds scary, but the raw HTML of the same page is 413KB — an 8.4× compression ratio, generated in 18ms. For comparison, dumping full a11y trees or HTML to a model with Playwright-style tools costs several to dozens of times more tokens.
 
-Verdict: "200–400 tokens" is login-page marketing; complex pages are still big. But **the compression and generation speed are real** — the kernel-level customization isn't vaporware.
+Verdict: "200–400 tokens" is login-page marketing; complex pages are still big. But the compression and generation speed are real — the kernel-level customization isn't vaporware.
 
 ![The GitHub repo page — test subject for the complex-page snapshot](/images/blog/ego-lite-review/01-github-repo-page.webp)
 
@@ -69,7 +69,7 @@ await click('@4')
 // → {"title":"Products","itemCount":6}
 ```
 
-Fill + click + verify took **1.16 seconds**. The `@2`-style refs come from the snapshot and don't depend on CSS classes, so frontend restyling won't break them — far sturdier than hand-written selectors.
+Fill + click + verify took 1.16 seconds. The `@2`-style refs come from the snapshot and don't depend on CSS classes, so frontend restyling won't break them — far sturdier than hand-written selectors.
 
 ![The products page after the agent logged itself in](/images/blog/ego-lite-review/03-saucedemo-logged-in.webp)
 
@@ -107,8 +107,6 @@ For scenarios like "Claude Code enriching 10 leads in 10 parallel Spaces," the a
 
 ## Verdict
 
-ego lite's differentiation isn't the "AI browser" buzzword — it's a pragmatic bet: **what agents need isn't a new browser, but a work environment that shares your login state without disturbing you**. The core capabilities survived testing: snapshot compression (8.4× vs raw HTML, 18ms to generate), iframe traversal, parallel Spaces. Take the marketing multipliers with salt — even the official materials can't agree on them.
+ego lite's differentiation isn't the "AI browser" buzzword — it's a pragmatic bet: what agents need isn't a new browser, but a work environment that shares your login state without disturbing you. The core capabilities survived testing: snapshot compression (8.4× vs raw HTML, 18ms to generate), iframe traversal, parallel Spaces. Take the marketing multipliers with salt — even the official materials can't agree on them.
 
 For someone like me who works through agent CLIs daily, it solves a real pain: before, an agent driving a browser either hijacked my Chrome focus or ran a headless instance with no logins. Now it's "it does its thing, I do mine" — that alone is worth the price (which is free).
-
-One more thing: this entire review — material gathering, feature testing, screenshot production — was executed by ego lite itself. Being able to independently complete a review of itself is probably the most hardcore validation an agent browser can get.

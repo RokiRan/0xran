@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
-import { useTranslations, localePath } from '../../i18n/utils';
+import { useTranslations, localePath, formatDate } from '../../i18n/utils';
 import { languages, type Lang } from '../../i18n/ui';
 
 export function getStaticPaths() {
@@ -10,6 +10,9 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
+
+/** Bump this date whenever the lists below change. */
+const NOW_UPDATED = new Date('2026-07-23');
 
 interface NowItem {
   date: string;
@@ -22,30 +25,30 @@ const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
     watching: [
       {
         date: '2026-07',
-        title: 'Marginalia',
-        body: '扩展在 Firefox 上的兼容性。WebExtensions 在 content script 上有些古怪的坑。',
+        title: 'OneShell',
+        body: '维护期。最近在打磨终端里的 AI 助手，让它能直接解释当前会话里的报错。',
       },
       {
         date: '2026-07',
-        title: 'Trace',
-        body: '加一个 <code>trace graph --svg</code>，让图表输出可以直接嵌进笔记里。',
+        title: 'MyNavicat',
+        body: '路线图上的下几项：PostgreSQL 支持、单元格编辑、SSH 隧道。',
       },
       {
-        date: '2026-06',
-        title: '在读',
-        body: "Robin Sloan 的《Mr. Penumbra's 24-Hour Bookstore》，重读。以及慢慢翻《The Pragmatic Programmer》。",
+        date: '2026-07',
+        title: '本职工作',
+        body: '在制造业做信息化。把数据、流程、自动化这套东西搬进车间，先从少打印几张纸开始。',
       },
     ],
     avoiding: [
       {
         date: '2026-07',
-        title: '任何带红点通知的东西',
-        body: '收件箱标签页已经关了。周五再打开。',
+        title: '新开坑',
+        body: '两个项目都在维护期，先把它们做扎实。',
       },
       {
-        date: '2026-06',
-        title: '仓促的改版',
-        body: '现在的站挺好。在 Q4 之前不动它。',
+        date: '2026-07',
+        title: '给这个站加功能',
+        body: '能写字、能放项目就够了。',
       },
     ],
   },
@@ -53,30 +56,30 @@ const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
     watching: [
       {
         date: '2026-07',
-        title: 'Marginalia',
-        body: 'Firefox compatibility for the extension. WebExtensions have weird gotchas around content scripts.',
+        title: 'OneShell',
+        body: 'Maintenance mode. Currently polishing the AI assistant in the terminal so it can explain errors from the live session.',
       },
       {
         date: '2026-07',
-        title: 'Trace',
-        body: 'Adding <code>trace graph --svg</code> so the chart output can be embedded in notes.',
+        title: 'MyNavicat',
+        body: 'Next on the roadmap: PostgreSQL support, cell editing, and SSH tunneling.',
       },
       {
-        date: '2026-06',
-        title: 'Reading',
-        body: "Robin Sloan's <em>Mr. Penumbra's 24-Hour Bookstore</em>, again. And a slow reread of <em>The Pragmatic Programmer</em>.",
+        date: '2026-07',
+        title: 'Day job',
+        body: 'Informatization work in manufacturing — bringing data, process, and automation into the workshop, starting with printing fewer forms.',
       },
     ],
     avoiding: [
       {
         date: '2026-07',
-        title: 'Anything with a notification badge',
-        body: 'Closed the inbox tab. Reopening it Friday.',
+        title: 'New side projects',
+        body: 'Both projects are in maintenance. Make them solid first.',
       },
       {
-        date: '2026-06',
-        title: 'Rush rebrand',
-        body: "The current site looks fine. I'm not touching it until at least Q4.",
+        date: '2026-07',
+        title: 'Adding features to this site',
+        body: 'It holds writing and projects. That is enough.',
       },
     ],
   },
@@ -94,15 +97,10 @@ const { watching, avoiding } = nowContent[lang];
           <span>{t('nav.home')}</span>
         </a>
       </div>
-      <span class="eyebrow fade-up" style="--i:1">{t('now.eyebrow')}</span>
+      <span class="eyebrow fade-up" style="--i:1">{t('now.eyebrow', { date: formatDate(NOW_UPDATED, lang) })}</span>
       <h1 class="page-title fade-up" style="--i:2">{t('now.title')}</h1>
       <p class="hero-lede fade-up" style="--i:3; max-width: 56ch;">{t('now.lede')}</p>
       <span class="hero-rule fade-up" style="--i:4" aria-hidden="true"></span>
-      <div class="hero-meta fade-up" style="--i:5">
-        <span class="text-muted">{t('now.updated')}</span>
-        <span class="text-subtle">·</span>
-        <span class="text-muted">{t('now.updated.value')}</span>
-      </div>
     </div>
   </section>
 

@@ -37,7 +37,7 @@ const projects = projectOrder
       <div class="hero-meta fade-up" style="--i:5">
         <span class="text-muted">{t('projects.count', { count: projects.length })}</span>
         <span class="text-subtle">·</span>
-        <span class="text-muted">{t('projects.updated')}</span>
+        <span class="text-muted">{t('projects.updated', { year: Math.max(...projects.map((p) => p.data.year)) })}</span>
       </div>
     </div>
   </section>

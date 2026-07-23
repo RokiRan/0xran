@@ -58,12 +58,7 @@ Can I make a splash? No idea. But if I can save one workshop a few printed forms
 
 ## Past Forty
 
-Past the age of "no longer confused," standing in the halftime break of life, I drink more water and sprint less — and my mind wanders further:
-
-- **Life**: The first half was spent proving myself. The second half, I want to spend on things I actually believe in. Moving bricks or writing code — if it feels worth it, it is.
-- **AI**: It won't replace you, but people who use it will. So don't fear it. Use it — and keep one eye on it.
-- **Money**: Still necessary, but I've come to see it as a result, not a goal. Do the right things and money queues up on its own.
-- **Family**: Code can be refactored; a kid's childhood can't be rolled back. Time with family beats any framework's lifecycle.
+Past the age of "no longer confused," standing in the halftime break of life, I drink more water and sprint less. The first half was spent proving myself; the second half I want to spend on things I actually believe in — moving bricks or writing code, if it feels worth it, it is. AI won't replace you, but people who use it will, so don't fear it; use it, and keep one eye on it. Money is still necessary, but I've come to see it as a result, not a goal — do the right things and it queues up on its own. And code can be refactored, but a kid's childhood can't be rolled back, so time with family beats any framework's lifecycle.
 
 Ten years ago, I thought I'd write code until retirement. Ten years later, I'm standing in a workshop wearing a hard hat, phone in pocket, remotely telling an AI to fix my bugs.
 

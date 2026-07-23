@@ -85,7 +85,7 @@
   --tracking-snug: -0.012em;
   --tracking-meta: 0.06em;
 
-  /* Spacing rhythm (8pt + golden) */
+  /* Spacing rhythm (8pt grid) */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -877,11 +877,11 @@
   /* ----- Motion utilities ----- */
   .fade-up {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
     transition:
       opacity var(--dur-content) var(--ease-out-quart),
       transform var(--dur-content) var(--ease-out-quart);
-    transition-delay: calc(var(--i, 0) * 70ms);
+    transition-delay: calc(var(--i, 0) * 45ms);
     will-change: opacity, transform;
   }
   .fade-up.is-in {
@@ -892,7 +892,7 @@
   .fade-in {
     opacity: 0;
     transition: opacity var(--dur-content) var(--ease-out-quart);
-    transition-delay: calc(var(--i, 0) * 70ms);
+    transition-delay: calc(var(--i, 0) * 45ms);
   }
   .fade-in.is-in {
     opacity: 1;

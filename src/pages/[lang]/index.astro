@@ -37,13 +37,7 @@ const email = profile[lang].social.email;
         <span>{t('hero.status')}</span>
       </div>
 
-      <h1 class="hero-title fade-up" style="--i:1">
-        {lang === 'zh' ? (
-          <Fragment set:html={`一位不知名极客的<br/><em>营地</em>。`} />
-        ) : (
-          <Fragment set:html={`A small camp for an<br/><em>obscure</em> geek.`} />
-        )}
-      </h1>
+      <h1 class="hero-title fade-up" style="--i:1" set:html={t('hero.title')} />
 
       <p class="hero-lede fade-up" style="--i:2">{t('hero.role')}</p>
 
@@ -62,8 +56,6 @@ const email = profile[lang].social.email;
 
       <div class="hero-meta fade-up" style="--i:5">
         <span class="text-muted">{profile[lang].name} · {lang === 'zh' ? 'Roki Ran' : '冉再兴'}</span>
-        <span class="text-subtle">·</span>
-        <span class="text-muted">{t('footer.location')}</span>
       </div>
     </div>
   </section>
@@ -89,7 +81,7 @@ const email = profile[lang].social.email;
     <div class="container">
       <div class="section-head fade-up">
         <h2>{t('home.featured.title')}</h2>
-        <span class="meta">{t('home.featured.meta')}</span>
+        <span class="meta">{t('home.featured.meta', { featured: projects.length, total: allProjects.length })}</span>
       </div>
 
       <div class="featured-grid">
