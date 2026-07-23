@@ -18,9 +18,35 @@ const { post } = Astro.props;
 const t = useTranslations(lang);
 const { Content } = await render(post);
 const d = post.data;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.date.toISOString(),
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+  keywords: d.tags.join(', '),
+  url: canonical,
+  mainEntityOfPage: canonical,
+  author: {
+    '@type': 'Person',
+    name: t('meta.author'),
+    url: Astro.site!.href,
+  },
+};
 ---
 
-<BaseLayout lang={lang} title={`${d.title} · ${t('meta.siteName')}`} description={d.description} activePath="/blog">
+<BaseLayout
+  lang={lang}
+  title={`${d.title} · ${t('meta.siteName')}`}
+  description={d.description}
+  activePath="/blog"
+  ogType="article"
+  article={{ publishedTime: d.date, tags: d.tags }}
+  jsonLd={jsonLd}
+>
   <article>
     <header class="article-header">
       <div class="container container--content">

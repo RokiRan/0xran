@@ -26,9 +26,33 @@ const posts = (await getCollection('blog', ({ id }) => id.startsWith(`${lang}/`)
 );
 
 const email = profile[lang].social.email;
+
+const p = profile[lang];
+const siteUrl = Astro.site!.href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: t('meta.siteName'),
+    description: t('meta.description'),
+    url: new URL(Astro.url.pathname, Astro.site).href,
+    inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+    author: { '@id': `${siteUrl}#person` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${siteUrl}#person`,
+    name: p.name,
+    description: p.bio,
+    url: siteUrl,
+    email: p.social.email.replace('mailto:', ''),
+    sameAs: [p.social.github, p.social.x],
+  },
+];
 ---
 
-<BaseLayout lang={lang} title={`${t('meta.siteName')} · ${t('meta.tagline')}`} description={t('meta.description')} activePath="/">
+<BaseLayout lang={lang} title={`${t('meta.siteName')} · ${t('meta.tagline')}`} description={t('meta.description')} activePath="/" jsonLd={jsonLd}>
   {/* ============ HERO ============ */}
   <section class="hero">
     <div class="container">

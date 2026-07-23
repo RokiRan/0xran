@@ -18,9 +18,26 @@ const { project } = Astro.props;
 const t = useTranslations(lang);
 const { Content } = await render(project);
 const d = project.data;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: d.title,
+  description: d.description,
+  applicationCategory: 'DeveloperApplication',
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+  url: canonical,
+  ...(d.repo ? { codeRepository: d.repo } : {}),
+  author: {
+    '@type': 'Person',
+    name: t('meta.author'),
+    url: Astro.site!.href,
+  },
+};
 ---
 
-<BaseLayout lang={lang} title={`${d.title} · ${t('meta.siteName')}`} description={d.description} activePath="/projects">
+<BaseLayout lang={lang} title={`${d.title} · ${t('meta.siteName')}`} description={d.description} activePath="/projects" jsonLd={jsonLd}>
   <section class="project-detail">
     <div class="container container--content">
       <div class="fade-up">

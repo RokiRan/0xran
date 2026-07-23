@@ -3,19 +3,53 @@ import { ClientRouter } from 'astro:transitions';
 import Analytics from '@vercel/analytics/astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { useTranslations } from '../i18n/utils';
-import type { Lang } from '../i18n/ui';
+import { useTranslations, langSwitchHref } from '../i18n/utils';
+import { languages, defaultLang, type Lang } from '../i18n/ui';
+import { profile } from '../data/profile';
 import '../styles/global.css';
+
+interface ArticleMeta {
+  publishedTime: Date;
+  tags?: string[];
+}
 
 interface Props {
   lang: Lang;
   title: string;
   description: string;
   activePath?: '/' | '/projects' | '/blog' | '/now';
+  ogType?: 'website' | 'article';
+  article?: ArticleMeta;
+  /** Extra JSON-LD node(s) to embed for this page. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { lang, title, description, activePath = '/' } = Astro.props;
+const {
+  lang,
+  title,
+  description,
+  activePath = '/',
+  ogType = 'website',
+  article,
+  jsonLd,
+} = Astro.props;
 const t = useTranslations(lang);
+
+const site = Astro.site!;
+const canonical = new URL(Astro.url.pathname, site).href;
+const otherLang: Lang = languages.find((l) => l !== lang)!;
+const alternate = new URL(langSwitchHref(Astro.url.pathname, otherLang), site).href;
+const defaultHref = new URL(langSwitchHref(Astro.url.pathname, defaultLang), site).href;
+
+const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
+const ogLocaleAlt = lang === 'zh' ? 'en_US' : 'zh_CN';
+const ogImage = new URL(`/images/og/${lang}.png`, site).href;
+const ogImageAlt = `${t('meta.siteName')} — ${t('meta.tagline')}`;
+// Twitter/X handle, derived from profile social URL (single source of truth).
+const xHandle = `@${profile[lang].social.x.split('/').pop()}`;
+
+const ldNodes = [...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [])];
+const ldJson = JSON.stringify(ldNodes.length === 1 ? ldNodes[0] : ldNodes).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -27,6 +61,47 @@ const t = useTranslations(lang);
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={t('meta.author')} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1f1d1b" />
+
+    <!-- Canonical + language alternates -->
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    <link rel="alternate" hreflang={otherLang} href={alternate} />
+    <link rel="alternate" hreflang="x-default" href={defaultHref} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={t('meta.siteName')} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.publishedTime.toISOString()} />
+          {article.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:site" content={xHandle} />
+    <meta name="twitter:creator" content={xHandle} />
+
+    <!-- Structured data -->
+    {ldNodes.length > 0 && <script type="application/ld+json" set:html={ldJson} />}
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="alternate"
