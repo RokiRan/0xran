@@ -63,15 +63,48 @@ const nav = [
   </div>
 </header>
 
-<style>
-  /* Show the icon matching the action (click to switch TO that theme) */
-  .theme-icon--sun {
-    display: none;
+<style is:global>
+  /* Theme toggle — sunrise/moonset swap animation.
+     The two icons stack inside the fixed 36×36 button and swap via
+     opacity + transform (display:none can't transition). CSS takes the
+     transition timing from the state an element moves INTO, so the
+     outgoing icon sets below the horizon quickly while the incoming one
+     springs up after a beat. Selectors must be global: the svgs are
+     rendered by the Icon component and don't carry this file's scope
+     attribute (the old scoped display:none rules never matched). */
+  [data-theme-toggle] {
+    position: relative;
   }
-  :global(:root[data-theme='dark']) .theme-icon--moon {
-    display: none;
+  .theme-icon {
+    position: absolute;
+    inset: 0;
+    margin: auto;
   }
-  :global(:root[data-theme='dark']) .theme-icon--sun {
-    display: block;
+
+  /* Visible state — springy entrance (applies when an icon becomes visible) */
+  .theme-icon--moon,
+  :root[data-theme='dark'] .theme-icon--sun {
+    transform: none;
+    opacity: 1;
+    transition:
+      transform 420ms var(--ease-out-back) 70ms,
+      opacity 240ms var(--ease-out-quart) 70ms;
+  }
+
+  /* Hidden state — sunk below the horizon, quick exit */
+  .theme-icon--sun,
+  :root[data-theme='dark'] .theme-icon--moon {
+    transform: translateY(10px) rotate(-120deg) scale(0.25);
+    opacity: 0;
+    transition:
+      transform 220ms var(--ease-in-out-quart),
+      opacity 160ms var(--ease-in-out-quart);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-icon {
+      transform: none !important;
+      transition: opacity 150ms linear !important;
+    }
   }
 </style>
