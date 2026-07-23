@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { useTranslations } from '../i18n/utils';
@@ -49,6 +50,7 @@ const t = useTranslations(lang);
     </script>
 
     <ClientRouter />
+    <Analytics />
   </head>
   <body>
     <Header lang={lang} activePath={activePath} />
