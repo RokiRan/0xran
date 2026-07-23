@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { useTranslations, localePath } from '../../i18n/utils';
+import { languages, type Lang } from '../../i18n/ui';
+import { friends } from '../../data/friends';
+import { profile } from '../../data/profile';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+const email = profile[lang].social.email;
+
+/** Neighbors fight over the creek-side spot on every rebuild. */
+const shuffled = [...friends].sort(() => Math.random() - 0.5);
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${t('friends.title')} · ${t('meta.siteName')}`}
+  description={t('friends.lede')}
+  activePath="/links"
+>
+  <section class="page-hero">
+    <div class="container container--content">
+      <div class="fade-up">
+        <a href={localePath(lang, '/')} class="back-link">
+          <Icon name="arrowLeft" size={14} />
+          <span>{t('nav.home')}</span>
+        </a>
+      </div>
+      <span class="eyebrow fade-up" style="--i:1">{t('friends.eyebrow')}</span>
+      <h1 class="page-title fade-up" style="--i:2">{t('friends.title')}</h1>
+      <p class="hero-lede fade-up" style="--i:3; max-width: 56ch;">{t('friends.lede')}</p>
+      <span class="hero-rule fade-up" style="--i:4" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container--content">
+      <div class="friend-grid fade-up" style="--i:1">
+        {
+          shuffled.map((f) => (
+            <a href={f.url} target="_blank" rel="noopener noreferrer" class="project-card friend-card">
+              <div class="head">
+                <div class="host">
+                  {f.avatar && <img src={f.avatar} alt="" width="40" height="40" class="avatar" loading="lazy" />}
+                  <h3>{f.name}</h3>
+                </div>
+                <span class="ext">
+                  <Icon name="arrowUpRight" size={16} />
+                </span>
+              </div>
+              <p class="desc">{f.tagline[lang]}</p>
+              <div class="meta">
+                <span>{t('friends.since', { date: f.since })}</span>
+                <span>{t('friends.hops', { n: f.hops })}</span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+      <p class="text-muted shuffle-note fade-up" style="--i:2">{t('friends.shuffle.note')}</p>
+
+      <hr class="divider" style="margin-top: 56px;" />
+
+      <h2 class="fade-up apply-title" style="--i:1">{t('friends.apply.title')}</h2>
+      <ul class="apply-rules fade-up" style="--i:2">
+        <li>{t('friends.apply.rule1')}</li>
+        <li>{t('friends.apply.rule2')}</li>
+        <li>{t('friends.apply.rule3')}</li>
+      </ul>
+      <a href={email} class="btn btn--primary fade-up" style="--i:3">
+        <Icon name="mail" size={16} />
+        <span>{t('home.contact.cta')}</span>
+      </a>
+
+      <p class="fade-up text-muted patrol">{t('friends.patrol')}</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .friend-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-5);
+  }
+  @media (max-width: 760px) {
+    .friend-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* A tent in the wind */
+  .friend-card:hover {
+    transform: translateY(-3px) rotate(-0.5deg);
+  }
+
+  .friend-card .host {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    min-width: 0;
+  }
+  .friend-card .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-2, 8px);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .shuffle-note {
+    margin-top: var(--sp-4);
+    font-size: 0.875rem;
+  }
+
+  .apply-title {
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+  .apply-rules {
+    margin: 0 0 var(--sp-5);
+    padding-inline-start: 1.25rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.8;
+  }
+  .patrol {
+    margin-top: 48px;
+    font-size: 0.875rem;
+    max-width: 56ch;
+  }
+</style>

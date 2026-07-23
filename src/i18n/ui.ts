@@ -13,6 +13,7 @@ export const ui = {
     'nav.projects': 'Projects',
     'nav.blog': 'Writing',
     'nav.now': 'Now',
+    'nav.friends': 'Neighbors',
 
     'theme.toLight': 'Light theme',
     'theme.toDark': 'Dark theme',
@@ -78,6 +79,21 @@ export const ui = {
     'project.repo': 'Repo',
     'project.demo': 'Demo',
 
+    'friends.eyebrow': 'Friend links',
+    'friends.title': 'Neighboring camps',
+    'friends.lede':
+      'The internet is a big wilderness. These tents are within shouting distance — everyone keeps their own fire, but we share the marshmallows.',
+    'friends.since': 'Camped since {date}',
+    'friends.hops': '{n} hops away',
+    'friends.shuffle.note': 'Neighbors reshuffle for the creek-side spot on every rebuild.',
+    'friends.apply.title': 'Pitch your tent',
+    'friends.apply.rule1': 'Your site shows signs of life within the last six months (weeds under a meter).',
+    'friends.apply.rule2': 'You hand-make weird things too.',
+    'friends.apply.rule3':
+      'Email me with the subject “Pitching my tent”, your URL, and one line about yourself.',
+    'friends.patrol':
+      'I patrol regularly and bury dead tents (404s). Report illegal construction by email.',
+
     'rss.title': 'Roki Ran',
     'rss.description': 'Essays and notes on building small, durable software.',
   },
@@ -91,6 +107,7 @@ export const ui = {
     'nav.projects': '项目',
     'nav.blog': '写作',
     'nav.now': '此刻',
+    'nav.friends': '友邻',
 
     'theme.toLight': '浅色主题',
     'theme.toDark': '深色主题',
@@ -154,6 +171,18 @@ export const ui = {
     'project.status.archived': '已归档',
     'project.repo': '仓库',
     'project.demo': '演示',
+
+    'friends.eyebrow': '友情链接',
+    'friends.title': '友邻营地',
+    'friends.lede': '互联网是一片荒原，这几顶帐篷离我不远。篝火各生各的，但烤棉花糖可以一起。',
+    'friends.since': '扎营于 {date}',
+    'friends.hops': '相距 {n} 个超链接',
+    'friends.shuffle.note': '每次重建，邻居们都要重新抢溪边的位置。',
+    'friends.apply.title': '想在这扎营？',
+    'friends.apply.rule1': '你的站还活着：半年内有动静，坟头草不超过一米。',
+    'friends.apply.rule2': '你也是个手搓东西的怪人。',
+    'friends.apply.rule3': '邮件我，主题写「扎营申请」，附上帐篷地址和一句自我介绍。',
+    'friends.patrol': '我会定期巡山，给塌掉的帐篷（404）收尸。发现邻里违建，欢迎邮件举报。',
 
     'rss.title': '冉再兴',
     'rss.description': '关于造小而耐用软件的随笔与笔记。',
