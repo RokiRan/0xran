@@ -601,6 +601,12 @@
     font-style: italic;
     font-variation-settings: 'opsz' 36, 'SOFT' 100;
   }
+  /* zh: CJK serif fallbacks (Source Han/Noto Serif SC) have ascent ≈1.16em,
+     well above the 1.05 line box; mobile Safari clips glyph tops at the line
+     box. Give zh a taller line box; Latin keeps the tight editorial setting. */
+  [lang|='zh'] .hero-title {
+    line-height: 1.25;
+  }
   .hero-lede {
     font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
     line-height: 1.55;
