@@ -500,10 +500,16 @@
       inset-inline: 0;
       top: 64px;
       flex-direction: column;
+      /* Base .nav is align-items:center for the desktop row; in the
+         column layout that centers each link and clips the divider
+         borders to the text width. Stretch so links span the menu. */
+      align-items: stretch;
       gap: 0;
       padding: var(--sp-3) var(--gutter);
       background: var(--bg);
       border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-pop);
+      animation: nav-drop 240ms var(--ease-out-quart);
     }
     .nav.is-open a {
       padding: 12px;
@@ -901,6 +907,20 @@
   @media (prefers-reduced-motion: reduce) {
     .fade-up,
     .fade-in {
+      opacity: 1;
+      transform: none;
+    }
+    .nav.is-open {
+      animation: none;
+    }
+  }
+
+  @keyframes nav-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
       opacity: 1;
       transform: none;
     }
