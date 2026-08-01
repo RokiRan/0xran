@@ -1054,6 +1054,11 @@
     max-width: var(--w-prose);
     margin-inline: auto;
   }
+  .article-body h3,
+  .article-body h4 {
+    max-width: var(--w-prose);
+    margin-inline: auto;
+  }
   .article-body p {
     font-size: 1.0625rem;
     line-height: var(--lh-loose);
