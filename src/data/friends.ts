@@ -29,4 +29,15 @@ export const friends: Friend[] = [
     since: '2026-07',
     hops: 3,
   },
+  {
+    name: '爱瞎搞的技术宅',
+    url: 'https://w2freed.com/',
+    avatar: '/images/friends/w2freed.jpg',
+    tagline: {
+      zh: '十年码龄，管理出身，技能树点亮一大片、没一个满级。嫌手动改 JSON 烦，顺手就撸个桌面工具。同样的坑踩两遍，他管那叫复盘。',
+      en: 'Ten years of code, a manager by day, a skill tree lit up everywhere with nothing maxed. Annoyed by editing JSON, so he built a desktop tool for it. Stepping into the same pit twice? He calls that a retrospective.',
+    },
+    since: '2026-08',
+    hops: 2,
+  },
 ];
