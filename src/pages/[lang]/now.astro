@@ -12,7 +12,7 @@ const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 
 /** Bump this date whenever the lists below change. */
-const NOW_UPDATED = new Date('2026-07-23');
+const NOW_UPDATED = new Date('2026-08-24');
 
 interface NowItem {
   date: string;
@@ -24,26 +24,31 @@ const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
   zh: {
     watching: [
       {
-        date: '2026-07',
-        title: 'OneShell',
-        body: '维护期。最近在打磨终端里的 AI 助手，让它能直接解释当前会话里的报错。',
+        date: '2026-08',
+        title: 'AI Agent 落地',
+        body: '方向定了：一心扑在 AI agent 的落地场景和应用上。0xAgent 已经开源，接下来把它摁进真实业务里用，从能跑通到真有用。',
+      },
+      {
+        date: '2026-08',
+        title: '0xAgent',
+        body: '刚开源的 Agent 框架。协作层的硬闸和状态机是核心，接下来在真实场景里磨它。',
       },
       {
         date: '2026-07',
-        title: 'MyNavicat',
-        body: '路线图上的下几项：PostgreSQL 支持、单元格编辑、SSH 隧道。',
+        title: 'OneShell / MyNavicat',
+        body: '转入维护期，有新需求再动。',
       },
       {
         date: '2026-07',
         title: '本职工作',
-        body: '在制造业做信息化。把数据、流程、自动化这套东西搬进车间，先从少打印几张纸开始。',
+        body: '在制造业做信息化。车间正好是 AI agent 落地的试验田。',
       },
     ],
     avoiding: [
       {
-        date: '2026-07',
-        title: '新开坑',
-        body: '两个项目都在维护期，先把它们做扎实。',
+        date: '2026-08',
+        title: '偏离方向的坑',
+        body: '和 AI agent 落地无关的新坑，一律不碰。',
       },
       {
         date: '2026-07',
@@ -55,26 +60,31 @@ const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
   en: {
     watching: [
       {
-        date: '2026-07',
-        title: 'OneShell',
-        body: 'Maintenance mode. Currently polishing the AI assistant in the terminal so it can explain errors from the live session.',
+        date: '2026-08',
+        title: 'Applied AI agents',
+        body: 'The direction is set: all-in on real-world AI agent scenarios and applications. 0xAgent is open-sourced; next step is pressing it into actual business use — from "it runs" to "it\'s useful."',
+      },
+      {
+        date: '2026-08',
+        title: '0xAgent',
+        body: 'My freshly open-sourced agent framework. The coordination gates and state machines are the core; now it gets hardened in real scenarios.',
       },
       {
         date: '2026-07',
-        title: 'MyNavicat',
-        body: 'Next on the roadmap: PostgreSQL support, cell editing, and SSH tunneling.',
+        title: 'OneShell / MyNavicat',
+        body: 'Moved into maintenance mode. They change when real needs show up.',
       },
       {
         date: '2026-07',
         title: 'Day job',
-        body: 'Informatization work in manufacturing — bringing data, process, and automation into the workshop, starting with printing fewer forms.',
+        body: 'Informatization work in manufacturing — and the workshop happens to be a perfect testing ground for applied AI agents.',
       },
     ],
     avoiding: [
       {
-        date: '2026-07',
-        title: 'New side projects',
-        body: 'Both projects are in maintenance. Make them solid first.',
+        date: '2026-08',
+        title: 'Off-direction side projects',
+        body: 'Anything unrelated to applied AI agents is a hard pass.',
       },
       {
         date: '2026-07',
