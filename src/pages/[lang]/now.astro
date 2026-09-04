@@ -12,7 +12,7 @@ const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 
 /** Bump this date whenever the lists below change. */
-const NOW_UPDATED = new Date('2026-08-24');
+const NOW_UPDATED = new Date('2026-09-04');
 
 interface NowItem {
   date: string;
@@ -20,8 +20,21 @@ interface NowItem {
   body: string; // may contain inline <code>
 }
 
-const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
+interface AboutBlock {
+  title: string;
+  body: string;
+  skills: string[];
+  status: string;
+}
+
+const nowContent: Record<Lang, { about: AboutBlock; watching: NowItem[]; avoiding: NowItem[] }> = {
   zh: {
+    about: {
+      title: '关于我',
+      body: '11 年软件开发，前端出身后转全栈，能一个人走完需求梳理、架构设计、三端开发到部署运维的闭环。交付过制造业数智管理平台（PC + 小程序 + 服务端，多租户 Docker 部署）、统一认证中心、出海结汇平台、新闻采编系统等十几个项目；带过前端小组，搭过私有 NPM / Docker 仓库与 CI/CD。这两年深度使用 AI 编程工具链，靠多 Agent 编排把单人产出放大到能独立交付整套系统。',
+      skills: ['Vue3', 'TypeScript', 'NestJS', 'MySQL', 'Redis', '微信小程序', 'Electron', 'Chrome 扩展', 'Docker', 'CI/CD', '多 Agent 编排'],
+      status: '目前佛系求职中：不海投、不焦虑，对 AI 应用方向的有趣机会保持开放。',
+    },
     watching: [
       {
         date: '2026-08',
@@ -58,6 +71,12 @@ const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
     ],
   },
   en: {
+    about: {
+      title: 'About',
+      body: '11 years in software — frontend turned full-stack, closing the loop from requirements and architecture through three-end development to deployment and ops, solo. Shipped a manufacturing digital-management platform (PC + mini-program + server, multi-tenant Docker), a unified auth center, a cross-border settlement platform, newsroom systems, and a dozen more projects; led a frontend team; built private NPM/Docker registries and CI/CD. Lately I run deep on AI coding toolchains, using multi-agent orchestration to scale one person\u2019s output to delivering entire systems.',
+      skills: ['Vue3', 'TypeScript', 'NestJS', 'MySQL', 'Redis', 'WeChat Mini Programs', 'Electron', 'Chrome Extensions', 'Docker', 'CI/CD', 'Multi-agent Orchestration'],
+      status: 'Casually open to work right now: no mass applications, no anxiety — just interested in good applied-AI opportunities.',
+    },
     watching: [
       {
         date: '2026-08',
@@ -95,7 +114,7 @@ const nowContent: Record<Lang, { watching: NowItem[]; avoiding: NowItem[] }> = {
   },
 };
 
-const { watching, avoiding } = nowContent[lang];
+const { about, watching, avoiding } = nowContent[lang];
 ---
 
 <BaseLayout lang={lang} title={`${t('now.title')} · ${t('meta.siteName')}`} description={t('now.lede')} activePath="/now">
@@ -116,7 +135,14 @@ const { watching, avoiding } = nowContent[lang];
 
   <section class="section">
     <div class="container container--content">
-      <h2 class="fade-up" style="margin-bottom: 16px;">{t('now.watching')}</h2>
+      <h2 class="fade-up" style="margin-bottom: 16px;">{about.title}</h2>
+      <p class="fade-up" style="--i:1; max-width: 64ch;">{about.body}</p>
+      <p class="fade-up" style="--i:2; margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 12px;">
+        {about.skills.map((skill) => <code>{skill}</code>)}
+      </p>
+      <p class="fade-up text-muted" style="--i:3; margin-top: 16px; font-size: 0.875rem;">{about.status}</p>
+
+      <h2 class="fade-up" style="margin-top: 48px; margin-bottom: 16px;">{t('now.watching')}</h2>
       <ul class="now-list fade-up" style="--i:1">
         {
           watching.map((item) => (
