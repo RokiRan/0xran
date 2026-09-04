@@ -44,7 +44,7 @@ export const ui = {
       'I read every message. Email is best for serious things; the rest of the internet is fine for everything else.',
     'home.contact.cta': 'Send an email',
 
-    'footer.note': 'Hand-built with Astro.',
+    'footer.note': 'Built with Astro.',
     'footer.copy': '© Roki Ran',
 
     'blog.eyebrow': 'Essays & notes',
@@ -137,7 +137,7 @@ export const ui = {
     'home.contact.body': '我每封邮件都会看。重要的事用邮件，其他的在社交网络上聊都行。',
     'home.contact.cta': '发封邮件',
 
-    'footer.note': '用 Astro 手搓的。',
+    'footer.note': '基于 Astro 搭建。',
     'footer.copy': '© 冉再兴',
 
     'blog.eyebrow': '随笔与笔记',
